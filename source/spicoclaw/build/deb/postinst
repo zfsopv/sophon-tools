@@ -1,0 +1,26 @@
+#!/bin/bash
+# spicoclaw deb postinst：建运行时目录、装载并启动 systemd 服务。
+# 二进制与 unit 文件已由 dpkg 直接安装到最终路径（/opt/sophon/picoclaw、/usr/lib/systemd/system）。
+# $1: install/upgrade/configure（dpkg 调用，详见 deb-policy）
+set -e
+
+# 运行目录：配置目录 /opt/sophon/picoclaw/.picoclaw（含 devproxy.key、config.json、logs、workspace）
+mkdir -p /opt/sophon/picoclaw/.picoclaw/logs /opt/sophon/picoclaw/.picoclaw/workspace
+
+# 首次安装时生成空 devproxy.key（bmssm 写入转发 key 的目标），避免权限问题
+if [ ! -f /opt/sophon/picoclaw/.picoclaw/devproxy.key ]; then
+    : > /opt/sophon/picoclaw/.picoclaw/devproxy.key
+fi
+
+# 归属 linaro（与运行身份一致），确保 gateway/launcher 可写
+if id linaro >/dev/null 2>&1; then
+    chown -R linaro:linaro /opt/sophon/picoclaw
+fi
+
+systemctl daemon-reload
+systemctl enable sophpicoclaw.service sophpicoclaw-launcher.service 2>/dev/null || true
+# 升级时重启新版本；首次安装时启动。失败不阻断 dpkg
+systemctl restart sophpicoclaw.service 2>/dev/null || systemctl start sophpicoclaw.service 2>/dev/null || true
+systemctl restart sophpicoclaw-launcher.service 2>/dev/null || systemctl start sophpicoclaw-launcher.service 2>/dev/null || true
+
+exit 0

@@ -1,0 +1,14 @@
+Package: spicoclaw
+Source: spicoclaw
+Version: @VERSION@
+Architecture: @ARCH@
+Maintainer: Sophgo <support@sophgo.com>
+Priority: optional
+Section: admin
+Depends: bmssm
+Description: spicoclaw - Sophon AI Agent Gateway (PicoClaw)
+ Sophon 设备 AI agent 服务（PicoClaw 定制版），systemd 托管。
+ 包含 sophpicoclaw.service（gateway，端口 18790）与
+ sophpicoclaw-launcher.service（Web 控制台，端口 18800）。
+ 安装位置 /opt/sophon/picoclaw，配置目录 /opt/sophon/picoclaw/.picoclaw。
+ 依赖 bmssm（提供 18080 llm-proxy 上游）。

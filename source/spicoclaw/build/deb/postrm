@@ -1,0 +1,16 @@
+#!/bin/bash
+# spicoclaw deb postrm：卸载后清理。
+# $1: remove/purge/upgrade（dpkg 调用，详见 deb-policy）
+set -e
+
+# purge 时移除 systemd 残留；配置目录保留（含用户数据）
+if [ "$1" = "purge" ]; then
+    rm -f /usr/lib/systemd/system/sophpicoclaw.service
+    rm -f /usr/lib/systemd/system/sophpicoclaw-launcher.service
+    rm -f /etc/systemd/system/sophpicoclaw.service
+    rm -f /etc/systemd/system/sophpicoclaw-launcher.service
+fi
+
+systemctl daemon-reload 2>/dev/null || true
+
+exit 0

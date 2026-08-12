@@ -1,0 +1,11 @@
+#!/bin/bash
+# spicoclaw deb prerm：卸载前停止服务。
+# $1: remove/upgrade/deconfigure（dpkg 调用，详见 deb-policy）
+set -e
+
+if [ "$1" = "remove" ]; then
+    systemctl stop sophpicoclaw.service sophpicoclaw-launcher.service 2>/dev/null || true
+    systemctl disable sophpicoclaw.service sophpicoclaw-launcher.service 2>/dev/null || true
+fi
+
+exit 0

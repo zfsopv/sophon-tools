@@ -54,6 +54,12 @@ __pycache__
 !source/pssm/build/
 !source/pssm/build/**
 
+# spicoclaw 子工程的 build/ 是构建脚本与 DEBIAN 打包模板（源码），非产物，需入库
+!source/spicoclaw/build/
+!source/spicoclaw/build/**
+# spicoclaw release/ 为 deb 构建产物，不入库（binary/<arch>/ 预编译二进制需入库）
+source/spicoclaw/release/
+
 # 构建产物（交叉编译二进制）
 source/pssm/ssm-arm64
 source/pssm/release/ssm

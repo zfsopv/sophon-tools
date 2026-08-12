@@ -1,0 +1,24 @@
+[Unit]
+Description=sophpicoclaw-launcher - AI Agent Web Console
+After=network-online.target bmssm.service
+Wants=network-online.target
+PartOf=sophpicoclaw.service
+
+[Service]
+Type=simple
+User=linaro
+Group=linaro
+# 固定 HOME 以定位 ~/.picoclaw 配置
+Environment=HOME=/opt/sophon/picoclaw
+WorkingDirectory=/opt/sophon/picoclaw
+ExecStart=/opt/sophon/picoclaw/bin/picoclaw-launcher -public -no-browser
+# 崩溃/被杀自动重启
+Restart=on-failure
+RestartSec=5
+# 日志走 journald
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,24 @@
+[Unit]
+Description=sophpicoclaw - AI Agent Gateway (PicoClaw)
+# 依赖网络就绪；bmssm 的 18080 llm-proxy 是它的上游，需在 bmssm 后起
+After=network-online.target bmssm.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=linaro
+Group=linaro
+# 固定 HOME 以定位 ~/.picoclaw 配置；二进制在 /opt/sophon/picoclaw
+Environment=HOME=/opt/sophon/picoclaw
+WorkingDirectory=/opt/sophon/picoclaw
+ExecStart=/opt/sophon/picoclaw/bin/picoclaw gateway -E
+# 崩溃/被杀自动重启
+Restart=on-failure
+RestartSec=5
+# 日志走 journald，同时保留原文件日志
+StandardOutput=journal
+StandardError=journal
+LimitNOFILE=65536
+
+[Install]
+WantedBy=multi-user.target
