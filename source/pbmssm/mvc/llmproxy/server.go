@@ -160,9 +160,9 @@ func handleModels(w http.ResponseWriter, r *http.Request) {
 //  2. 遍历所有 messages 的 content：
 //     - 文本块 → 保留
 //     - 图片块（image_url/image）→ 提取图片数据 → 哈希查缓存：
-//         * 命中 → 复用描述
-//         * 未命中 → 调 VLM 生成详细描述 → 缓存
-//       用文本块替换图片块：{type:text, text:"这里有一个 image，其内容如下：<描述>"}
+//     * 命中 → 复用描述
+//     * 未命中 → 调 VLM 生成详细描述 → 缓存
+//     用文本块替换图片块：{type:text, text:"这里有一个 image，其内容如下：<描述>"}
 //  3. 所有请求统一路由到 LLM（替换 model 为 LLM model_name）
 //  4. 用 bmssm 内部存储的 LLM 上游 key 向供应商转发
 func handleChatCompletions(w http.ResponseWriter, r *http.Request) {
